@@ -1,0 +1,10 @@
+kind: pipeline
+name: default
+workspace:
+  base: /working/repo
+steps:
+  - name: compile
+    image: codesys-ide:local
+    commands:
+      - ./tests/run.sh
+

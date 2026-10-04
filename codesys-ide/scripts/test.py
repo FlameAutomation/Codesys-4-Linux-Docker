@@ -1,0 +1,2 @@
+print ("CODESYS scripting test")
+

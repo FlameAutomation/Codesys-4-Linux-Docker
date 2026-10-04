@@ -1,0 +1,43 @@
+#!/bin/bash
+LOCKDIR=/tmp/xvnc-display/
+
+export HOME="/home/wineuser"
+export HOSTNAME="5ba48578c1de"
+export LANG="en_US.UTF-8"
+export LANGUAGE="en_US:en"
+export LC_ALL="en_US.UTF-8"
+export LOGNAME="wineuser"
+export MAIL="/var/mail/wineuser"
+export OLDPWD="/home/wineuser"
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"
+export PWD="/home/wineuser"
+export SHELL="/bin/bash"
+export SHLVL="2"
+export TERM="xterm"
+export USER="wineuser"
+export WINEPREFIX="/home/wineuser/.wine.cds"
+
+# start session with delay in background
+mkdir -p ${LOCKDIR}
+for ((x=0; $x < 10000; x=$x+1)); do
+    if [ ! -f ${LOCKDIR}${x} ]; then
+	touch ${LOCKDIR}${x}
+	export DISPLAY=:${x}
+	break
+    fi
+done
+
+export WINEPREFIX=~/.wine.cds
+(
+	sleep 1;
+	(
+	    ratpoison &
+#	xeyes&
+	    wine-development ${WINEPREFIX}/drive_c/CODESYS/CODESYS/Common/CODESYS.exe
+	    #x-terminal-emulator
+	)
+#) &> /tmp/vnc.log &
+) &> /tmp/vnc.log &
+
+# start VNC
+/usr/bin/Xvnc -inetd -once securitytypes=none -NeverShared -depth 24 -geometry 1800x900 -geometry 1200x768 ${DISPLAY}
